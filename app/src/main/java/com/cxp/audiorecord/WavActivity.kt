@@ -6,31 +6,26 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cxp.audiorecord.databinding.ActivityMp3Binding
+import com.cxp.audiorecord.databinding.ActivityWavBinding
+import com.cxp.audiorecord.wavrecord.AudioRecorder
 import com.czt.mp3recorder.MP3Recorder
 import com.permissionx.guolindev.PermissionX
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * <pre>
  *     author : ChengPeng
  *     e-mail : cxpnobug@gmail.com
- *     time   : 2021/07/13
- *     desc   : mp3 音频录制
+ *     time   : 2021/07/14
+ *     desc   : Wav 录音
  *     version: 1.0
  * </pre>
  */
-class Mp3Activity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMp3Binding
-
-    private var mRecord: MP3Recorder? = null
+class WavActivity:AppCompatActivity() {
+    private lateinit var binding: ActivityWavBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMp3Binding.inflate(layoutInflater)
+        binding = ActivityWavBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.startRecord.setOnClickListener {
@@ -38,31 +33,26 @@ class Mp3Activity : AppCompatActivity() {
                 .permissions(Manifest.permission.RECORD_AUDIO)
                 .request { allGranted, _, _ ->
                     if (allGranted) {
-                        try {
-                            val fileName =
-                                SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(Date())
-                            mRecord = MP3Recorder(File(FileUtil.getMp3FilePath(fileName)))
-                            mRecord?.start()
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
+                        //初始化录制
+                        AudioRecorder.initRecord()
+                        //开始录制
+                        AudioRecorder.startRecord()
                     }
                 }
         }
-        binding.stopRecord.setOnClickListener {
-            mRecord?.stop()
+
+        binding.pauseRecord.setOnClickListener {
+            AudioRecorder.pauseRecord()
         }
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mRecord?.stop()
+        binding.stopRecord.setOnClickListener {
+            //停止录制
+            AudioRecorder.stopRecord()
+        }
     }
 
     companion object {
         fun start(context: Context) {
-            val intent = Intent(context, Mp3Activity::class.java)
+            val intent = Intent(context, WavActivity::class.java)
             context.startActivity(intent)
         }
     }

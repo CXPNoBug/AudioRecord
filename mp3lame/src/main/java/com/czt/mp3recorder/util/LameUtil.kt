@@ -7,6 +7,7 @@ package com.czt.mp3recorder.util
  *     time   : 2021/07/13
  *     desc   :
  *     version: 1.0
+ *     address: https://www.cnblogs.com/ct2011/p/4080193.html
  * </pre>
  */
 object LameUtil {

@@ -1,4 +1,4 @@
-package com.cxp.audiorecord
+package com.cxp.audiorecord.wavrecord
 
 /**
  * <pre>
